@@ -180,3 +180,35 @@ But we are easily able to get a good reduction in frontend stalls by simply inli
 ```
      3,038,664,962      stalled-cycles-frontend          #   11.82% frontend cycles idle        (71.42%)
 ```
+
+Removing all uses of `std::vector` and `std::pair` and replacing that with `std::array` and:
+```
+template <typename T, typename U>
+struct pair
+{
+    T first;
+    U second;
+};
+```
+does reduce file size from ~35kb to ~17kb and we see a dramatic drop in frontend stalls, but we've gone backwards! Our program runs slower!
+```
+         21,984.50 msec task-clock                       #    1.000 CPUs utilized             
+               122      context-switches                 #    5.549 /sec                      
+                 0      cpu-migrations                   #    0.000 /sec                      
+                77      page-faults                      #    3.502 /sec                      
+    87,599,663,427      cycles                           #    3.985 GHz                         (71.43%)
+     5,065,009,787      stalled-cycles-frontend          #    5.78% frontend cycles idle        (71.43%)
+   241,239,746,233      instructions                     #    2.75  insn per cycle            
+                                                  #    0.02  stalled cycles per insn     (71.43%)
+    39,019,990,137      branches                         #    1.775 G/sec                       (71.43%)
+         2,970,463      branch-misses                    #    0.01% of all branches             (71.43%)
+    99,169,076,569      L1-dcache-loads                  #    4.511 G/sec                       (71.43%)
+       749,169,875      L1-dcache-load-misses            #    0.76% of all L1-dcache accesses   (71.43%)
+   <not supported>      LLC-loads                                                             
+   <not supported>      LLC-load-misses                                                       
+
+      21.986213315 seconds time elapsed
+
+      21.983902000 seconds user
+       0.000999000 seconds sys
+```
