@@ -9,6 +9,7 @@
 
 #define G (6.67430e-11)
 
+[[gnu::always_inline]]
 auto calculate_gravitational_force(double m1, double m2, double distance) -> double
 {
     return (G * m1 * m2) / (pow(distance, 2));
