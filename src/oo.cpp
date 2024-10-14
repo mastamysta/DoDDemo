@@ -1,4 +1,5 @@
 #include <vector>
+#include <array>
 #include <iostream>
 #include <cstdint>
 
@@ -15,7 +16,7 @@ public:
         next_id++;
         position = { generate_position(), generate_position() };
         velocity = { 0, 0 };
-        mass = 0;
+        mass = generate_position();
     }
 
     uint32_t id;
@@ -44,7 +45,7 @@ auto operator*(const std::pair<double, double>& lhs, double rhs)
 class space
 {
 public:
-    space() : objects(std::vector(NUM_OBJECTS, object())) {}
+    space() : objects(std::vector<object>(NUM_OBJECTS, object())) {}
 
     auto calculate() -> void
     {
@@ -61,7 +62,8 @@ public:
                 if (object.id == other.id)
                     continue;
 
-                auto [dx, dy] = object.position - (other).position;
+                auto [dx, dy] = object.position - other.position;
+
 
                 fx += calculate_gravitational_force(object.mass, other.mass, dx);
                 fy += calculate_gravitational_force(object.mass, other.mass, dy);
