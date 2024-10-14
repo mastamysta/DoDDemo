@@ -1,4 +1,3 @@
-#include <vector>
 #include <array>
 #include <iostream>
 #include <cstdint>
@@ -14,7 +13,7 @@ public:
     {
         id = next_id;
         next_id++;
-        position = { generate_position(), generate_position() };
+        position = {  generate_position(), generate_position() };
         velocity = { 0, 0 };
         mass = generate_position();
     }
@@ -37,15 +36,14 @@ auto operator+(const std::pair<double, double>& lhs,
     return std::pair(lhs.first + rhs.first, lhs.second + rhs.second);
 }
 
-auto operator*(const std::pair<double, double>& lhs, double rhs)
+auto operator/(const std::pair<double, double>& lhs, double rhs)
 {
-    return std::pair(lhs.first * rhs, lhs.second * rhs);
+    return std::pair(lhs.first / rhs, lhs.second / rhs);
 }
 
 class space
 {
 public:
-    space() : objects(std::vector<object>(NUM_OBJECTS, object())) {}
 
     auto calculate() -> void
     {
@@ -69,7 +67,7 @@ public:
                 fy += calculate_gravitational_force(object.mass, other.mass, dy);
             }
 
-            auto accel = force * object.mass;
+            auto accel = force / object.mass;
 
             // Apply accelleration for one unit-time:
             object.velocity = object.velocity + accel;
@@ -94,7 +92,7 @@ public:
     }
 
 private:
-    std::vector<object> objects;
+    std::array<object, NUM_OBJECTS> objects;
 };
 
 int main()
